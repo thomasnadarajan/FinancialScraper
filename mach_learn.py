@@ -18,7 +18,11 @@ def add_years(d, years):
     except ValueError:
         return d + (dt.date(d.year + years, 1, 1) - dt.date(d.year, 1, 1))
 parser = Financials("AAPL")
-income_points = parser.income_statement.loc["Net Income"]
+#col_series = parser.income_statement.columns
+stored = parser.income_statement
+#print(parser.income_statement)
+#income_points = parser.income_statement.loc["Net Income"]
+income_points = stored.loc["Net Income"]
 #test_corrected = parser.income_statement
 corrected_indices = income_points.index.map(dt.datetime.toordinal).to_numpy()
 #print(corrected_indices.reshape(1,-1))
@@ -26,13 +30,12 @@ corrected_values = income_points.to_numpy()
 #print(corrected_values.reshape(1, -1))
 xTrain, xTest, yTrain, yTest = train_test_split(corrected_indices, corrected_values, test_size = 0.2)
 #print(yTrain)
-income_model = LinearRegression().fit(xTrain.reshape(1, -1), yTrain.reshape(1,-1))
+income_model = LinearRegression().fit(xTrain.reshape(-1, 1), yTrain)
 #value_at_2021 = add_years(dt.datetime.now(), 1)
 
 #a = xTest.to_numpy().reshape(1, -1)
 print(income_model.coef_)
-#prediction = income_model.predict(xTest.to_numpy().reshape(1, -1))
-#print(prediction)
-#plt.scatter(income_points.index.tolist()[:].append(value_at_2021), income_points.values.tolist()[:].append(prediction))
-
-#plt.show()
+prediction = income_model.predict(xTest.reshape(-1,1))
+print(prediction)
+plt.scatter(xTest.tolist(), prediction.tolist())
+plt.show()
