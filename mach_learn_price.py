@@ -46,3 +46,4 @@ prediction = price_model.predict(xTest.reshape(-1,1))
 
 plt.scatter(xTest.tolist(),prediction.tolist())
 print(mpld3.fig_to_html(plt.gcf()))
+plt.show()
