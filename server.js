@@ -11,14 +11,12 @@ mongoose.connect(mongKey).then(()=>{
 }).catch((error)=>{console.log(error);});
 
 app.get('/', (req, res) => {
-    res.send("Hello, World!");
+    res.sendFile(path.join(__dirname + "/home/Home.html"))
 })
-app.get('/home.js', (req, res) => {
-    res.sendFile(path.join(__dirname + "/home.js"))
-})
-app.get('/home', (req, res) => {
-    res.sendFile(path.join(__dirname + "/Home.html"));
-})
+
+
+app.use(express.static(__dirname + "/home"))
+app.use(express.static(__dirname))
 app.use(bodyParser.json());
 app.post('/signup', (req, res)=>{
     const user = new User({
